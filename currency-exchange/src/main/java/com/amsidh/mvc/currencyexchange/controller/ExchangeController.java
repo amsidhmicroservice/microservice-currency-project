@@ -1,10 +1,10 @@
-package com.amsidh.mvc.controller;
+package com.amsidh.mvc.currencyexchange.controller;
 
-import com.amsidh.mvc.entity.CurrencyExchangeEntity;
 import com.amsidh.mvc.model.CurrencyExchange;
 import com.amsidh.mvc.model.InstanceInfo;
-import com.amsidh.mvc.repository.ExchangeRepository;
-import com.amsidh.mvc.util.MapperUtil;
+import com.amsidh.mvc.currencyexchange.repository.ExchangeRepository;
+import com.amsidh.mvc.currencyexchange.util.MapperUtil;
+import com.amsidh.mvc.currencyexchange.entity.CurrencyExchangeEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

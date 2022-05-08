@@ -1,7 +1,7 @@
-package com.amsidh.mvc.controller;
+package com.amsidh.mvc.currencyconversion.controller;
 
+import com.amsidh.mvc.currencyconversion.service.CurrencyConversionService;
 import com.amsidh.mvc.model.CurrencyConversion;
-import com.amsidh.mvc.service.CurrencyConversionService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

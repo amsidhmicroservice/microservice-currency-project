@@ -1,17 +1,15 @@
-package com.amsidh.mvc.service.impl;
+package com.amsidh.mvc.currencyconversion.service.impl;
 
-import com.amsidh.mvc.feign.CurrencyExchangeClient;
+import com.amsidh.mvc.currencyconversion.service.CurrencyConversionService;
+import com.amsidh.mvc.currencyconversion.feign.CurrencyExchangeClient;
 import com.amsidh.mvc.model.CurrencyConversion;
 import com.amsidh.mvc.model.CurrencyExchange;
 import com.amsidh.mvc.model.InstanceInfo;
-import com.amsidh.mvc.service.CurrencyConversionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.JSONParser;
-import org.springframework.cloud.function.json.GsonMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

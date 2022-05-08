@@ -1,4 +1,4 @@
-package com.amsidh.mvc;
+package com.amsidh.mvc.currencyexchange;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

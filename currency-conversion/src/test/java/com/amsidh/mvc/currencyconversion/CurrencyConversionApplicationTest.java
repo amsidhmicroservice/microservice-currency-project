@@ -1,4 +1,4 @@
-package com.amsidh.mvc;
+package com.amsidh.mvc.currencyconversion;
 
 import com.amsidh.mvc.model.CurrencyExchange;
 import com.epages.wiremock.starter.WireMockTest;

@@ -1,4 +1,4 @@
-package com.amsidh.mvc.service;
+package com.amsidh.mvc.currencyconversion.service;
 
 import com.amsidh.mvc.model.CurrencyConversion;
 

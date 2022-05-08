@@ -28,7 +28,7 @@
     </appender>
     <appender name="JSONBasedRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>D:\currency-exchange-json.log</file>
-        <encoder class="com.amsidh.mvc.common.JsonEncoder"/>
+        <encoder class="JsonEncoder"/>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>currency-exchange-json-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>1MB</maxFileSize>

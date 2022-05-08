@@ -1,6 +1,6 @@
-package com.amsidh.mvc.util;
+package com.amsidh.mvc.currencyexchange.util;
 
-import com.amsidh.mvc.entity.CurrencyExchangeEntity;
+import com.amsidh.mvc.currencyexchange.entity.CurrencyExchangeEntity;
 import com.amsidh.mvc.model.CurrencyExchange;
 import org.modelmapper.ModelMapper;
 

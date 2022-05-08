@@ -1,6 +1,6 @@
-package com.amsidh.mvc.repository;
+package com.amsidh.mvc.currencyexchange.repository;
 
-import com.amsidh.mvc.entity.CurrencyExchangeEntity;
+import com.amsidh.mvc.currencyexchange.entity.CurrencyExchangeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

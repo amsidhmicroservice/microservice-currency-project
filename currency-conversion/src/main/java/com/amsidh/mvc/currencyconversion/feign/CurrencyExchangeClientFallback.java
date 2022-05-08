@@ -1,4 +1,4 @@
-package com.amsidh.mvc.feign;
+package com.amsidh.mvc.currencyconversion.feign;
 
 import com.amsidh.mvc.model.CurrencyExchange;
 import org.springframework.web.bind.annotation.PathVariable;

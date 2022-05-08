@@ -1,7 +1,5 @@
-package com.amsidh.mvc.feign;
+package com.amsidh.mvc.currencyconversion.feign;
 
-import com.amsidh.mvc.exception.BadRequestException;
-import com.amsidh.mvc.exception.NotFoundException;
 import com.amsidh.mvc.model.CurrencyExchange;
 import com.epages.wiremock.starter.WireMockTest;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,12 +1,9 @@
-package com.amsidh.mvc.entity;
+package com.amsidh.mvc.currencyexchange.entity;
 
-import com.amsidh.mvc.model.InstanceInfo;
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity
 @Table(name = "Exchange")
