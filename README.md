@@ -6,4 +6,6 @@
    http://localhost:8181/currency-exchange/USD/to/INR
 3) CurrencyConversion Service
    http://localhost:8282/currency-conversion/from/USD/to/INR/quantity/13
-4) 
+4) Eureka Discovery URL
+   http://localhost:8761/
+   
