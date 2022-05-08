@@ -1,0 +1,115 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: fluentd-ms-config
+  namespace: logging
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+data:
+  output.conf: |-
+    <match kubernetes.var.log.containers.currency-conversion-**.log>
+      @id currency-conversion-service
+      @type elasticsearch
+      @log_level info
+      type_name fluentd
+      include_tag_key true
+      include_timestamp true
+      time_key_exclude_timestamp false
+      host elasticsearch
+      port 9200
+      scheme http
+      ssl_version TLSv1_2
+      ssl_verify false
+      logstash_format false
+      index_name ms-logs.ms-currency-conversion.%Y-%m-%d
+      reconnect_on_error true
+      reload_on_failure false
+      reload_connections false
+      slow_flush_log_threshold 25.0
+      <buffer tag, time>
+        @type file
+        path /var/log/fluentd-buffers/currency-conversion
+        total_limit_size 1024MB
+        flush_mode interval
+        retry_type exponential_backoff
+        flush_thread_count 20
+        flush_interval 5s
+        retry_timeout 1m
+        retry_max_interval 30
+        chunk_limit_size 10M
+        queue_limit_length 8
+        overflow_action drop_oldest_chunk
+        timekey 0.1h
+      </buffer>
+    </match>
+    <match kubernetes.var.log.containers.currency-exchange-**.log>
+      @id currency-exchange-service
+      @type elasticsearch
+      @log_level info
+      type_name fluentd
+      include_tag_key true
+      include_timestamp true
+      time_key_exclude_timestamp false
+      host elasticsearch
+      port 9200
+      scheme http
+      ssl_version TLSv1_2
+      ssl_verify false
+      logstash_format false
+      index_name ms-logs.ms-currency-exchange.%Y-%m-%d
+      reconnect_on_error true
+      reload_on_failure false
+      reload_connections false
+      slow_flush_log_threshold 25.0
+      <buffer tag, time>
+        @type file
+        path /var/log/fluentd-buffers/currency-exchange
+        total_limit_size 1024MB
+        flush_mode interval
+        retry_type exponential_backoff
+        flush_thread_count 20
+        flush_interval 5s
+        retry_timeout 1m
+        retry_max_interval 30
+        chunk_limit_size 10M
+        queue_limit_length 8
+        overflow_action drop_oldest_chunk
+        timekey 0.1h
+      </buffer>
+    </match>
+    <match kubernetes.var.log.containers.ms-bureau-**.log>
+      @id bureau-service
+      @type elasticsearch
+      @log_level info
+      type_name fluentd
+      include_tag_key true
+      include_timestamp true
+      time_key_exclude_timestamp false
+      host elasticsearch
+      port 9200
+      scheme http
+      ssl_version TLSv1_2
+      ssl_verify false
+      logstash_format false
+      index_name ms-logs.ms-bureau-service.%Y-%m-%d
+      reconnect_on_error true
+      reload_on_failure false
+      reload_connections false
+      slow_flush_log_threshold 25.0
+      <buffer tag, time>
+        @type file
+        path /var/log/fluentd-buffers/bureau-service
+        total_limit_size 1024MB
+        flush_mode interval
+        retry_type exponential_backoff
+        flush_thread_count 20
+        flush_interval 5s
+        retry_timeout 1m
+        retry_max_interval 30
+        chunk_limit_size 10M
+        queue_limit_length 8
+        overflow_action drop_oldest_chunk
+        timekey 0.1h
+      </buffer>
+    </match>

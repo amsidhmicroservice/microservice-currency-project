@@ -1,0 +1,18 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: spring-cloud-config-server
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        bootstrap: true
+        native:
+          search-locations: file:///E:/workspaces/git-localconfig-repo
+        git:
+          uri: https://github.com/amsidhmicroservice/git-localconfig-repo.git
+          default-label: master
+          clone-on-start: true

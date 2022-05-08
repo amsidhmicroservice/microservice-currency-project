@@ -1,0 +1,9 @@
+server:
+  port: 8181
+spring:
+  application:
+    name: currency-exchange
+  config:
+      import: optional:configserver:http://localhost:8888
+  profiles:
+      active: test

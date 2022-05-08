@@ -1,0 +1,35 @@
+#docker run -d -p 8181:8181 amsidhmicroservice/currencyexchange:latest
+#docker run -d -p 8282:8282 -e "CURRENCY_EXCHANGE_URI=http://172.17.0.2" amsidhmicroservice/currencyconversion:latest
+version: "3.7"
+services:
+  elasticsearch:
+    image: elasticsearch:6.8.23
+    ports:
+      - 9200:9200
+
+  kibana:
+    image: kibana:6.8.23
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+            
+    depends_on:
+      - elasticsearch
+  
+  fluentd:
+    image: xi2852amsidhlokhande/custom-fluend:v1.2.4
+    ports:
+      - '24224:24224'
+      - '5140:5140'
+    depends_on:
+      - elasticsearch
+      - kibana      
+    volumes:
+      - type: bind
+        source: /c/Users/amsidh.lokhande/Downloads/fluentd_repo/log/
+        target: /var/log/containers/ 
+      - type: bind
+        source: /c/Users/amsidh.lokhande/Downloads/fluentd_repo/conf/
+        target: /fluentd/etc/
+      

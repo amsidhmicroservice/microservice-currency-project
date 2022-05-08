@@ -1,0 +1,14 @@
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: FULL
+        errorDecoder: com.amsidh.mvc.client.CustomErrorDecoder
+      currency-exchange-client:
+        errorDecoder: com.amsidh.mvc.client.CustomErrorDecoder
+
+CURRENCY_EXCHANGE_URL: http://localhost:${wiremock.port}

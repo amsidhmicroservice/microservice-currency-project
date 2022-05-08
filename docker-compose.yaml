@@ -1,0 +1,17 @@
+#docker run -d -p 8181:8181 amsidhmicroservice/currencyexchange:latest
+#docker run -d -p 8282:8282 -e "CURRENCY_EXCHANGE_URI=http://172.17.0.2" amsidhmicroservice/currencyconversion:latest
+version: "3.7"
+services:
+  currencyexchange:
+    image: amsidhmicroservice/currency-exchange:1.1.8
+    ports:
+      - 8181:8181
+
+  currencyconversion:
+    image: amsidhmicroservice/currency-conversion:1.1.8
+    ports:
+      - 8282:8282
+    environment:
+      CURRENCY_EXCHANGE_URI: http://currencyexchange:8181
+    depends_on:
+      - currencyexchange

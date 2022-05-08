@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.amsidh.mvc</groupId>
+        <artifactId>microservice-currency-project</artifactId>
+        <version>1.1.8</version>
+    </parent>
+    <artifactId>currency-conversion</artifactId>
+    <description>Currency-Conversion project for Spring Boot</description>
+    <properties>
+        <docker.skip>true</docker.skip>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.amsidh.mvc</groupId>
+            <artifactId>common</artifactId>
+            <version>1.1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>2.27.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.epages</groupId>
+            <artifactId>wiremock-spring-boot-starter</artifactId>
+            <version>0.8.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-client</artifactId>
+        </dependency>
+    </dependencies>
+</project>

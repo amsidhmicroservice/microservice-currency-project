@@ -1,0 +1,19 @@
+apiVersion: skaffold/v2beta19
+kind: Config
+metadata:
+  name: currencyservice
+build:
+  artifacts:
+    - image: amsidhmicroservice/currencyconversion
+      context: currencyconversion
+      docker: { }
+    - image: amsidhmicroservice/currencyexchange
+      context: currencyexchange
+      docker: { }
+deploy:
+  kubectl:
+    manifests:
+      - deployment/currencyconversion-deployment.yaml
+      - deployment/2-currencyexchange-deployment.yaml
+      - deployment/ingress-gateway.yaml
+      - deployment/rbac.yml

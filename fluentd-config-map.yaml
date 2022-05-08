@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+  namespace: infra
+data:
+  fluent.conf: |-
+    #<system>
+    #  root_dir /tmp/fluentd-buffers/
+    #</system>
+    <label @FLUENT_LOG>
+      <match fluent.**>
+        @type stdout
+      </match>
+    </label>
+    <source>
+      @id source-currency-exchange-id
+      @type tail
+      path /var/log/containers/currency-exchange*.log
+      pos_file /var/log/currency-exchange.log.pos
+      tag raw.kubernetes.*
+      read_from_head true
+      refresh_interval 5s
+      encoding UTF-8
+      <parse>
+        @type multi_format
+        <pattern>
+          format json
+          time_key timestamp
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+          localtime true
+        </pattern>
+        <pattern>
+          format /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
+          time_format %Y-%m-%dT%H:%M:%S.%N%:z
+          localtime true
+        </pattern>
+        <pattern>
+          format none
+        </pattern>
+      </parse>
+    </source>
+
+    # Detect exceptions in the log output and forward them as one log entry.
+    <match raw.kubernetes.var.log.containers.currency-exchange-**.log>
+      @id detect_exceptions_id
+      @type detect_exceptions
+      remove_tag_prefix raw
+      message log
+      languages java
+      stream stream
+      multiline_flush_interval 0.1
+      max_bytes 500000
+      max_lines 1000
+    </match>
+
+    # Concatenate multi-line logs
+    <filter kubernetes.var.log.containers.currency-exchange-**.log>
+      @id filter_concat_id
+      @type concat
+      key message
+      multiline_end_regexp /\n$/
+      separator ""
+    </filter>
+
+    ###### Enriches records with Kubernetes metadata  ######
+    <filter kubernetes.var.log.containers.currency-exchange-**.log>
+      @id filter_kubernetes_metadata_id
+      @type kubernetes_metadata
+      verify_ssl true
+    </filter>
+
+    #############Store to File FluentD Configuration###################
+    <match kubernetes.var.log.containers.currency-exchange-**.log>
+      @id copyToFile
+      @type file
+      path /var/log/output/file
+      compress gzip
+      <format>
+        localtime false
+      </format>
+      <buffer time>
+        timekey_wait 10m
+        timekey 86400
+        timekey_use_utc true
+      </buffer>
+      <inject>
+        localtime false
+      </inject>
+    </match>

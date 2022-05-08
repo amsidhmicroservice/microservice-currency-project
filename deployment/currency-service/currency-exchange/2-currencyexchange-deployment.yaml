@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: currency-exchange
+  name: currency-exchange
+  namespace: default
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: currency-exchange
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: currency-exchange
+    spec:
+      containers:
+        - image: amsidhmicroservice/currency-exchange:1.1.8
+          imagePullPolicy: Always
+          name: currency-exchange
+          ports:
+            - name: http-exchange
+              containerPort: 8181
+          env:
+            - name: TZ
+              value: "Asia/Kolkata"
+            - name: I18N_LOCALE
+              value: "as-IN"
+            - name: RDS_HOSTNAME
+              value: currency-exchange-mysql
+            - name: RDS_PORT
+              value: "3306"
+            - name: RDS_DB_NAME
+              value: currency_exchange_db
+            - name: RDS_USERNAME
+              value: scoot
+            - name: RDS_PASSWORD
+              value: tiger
+
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /currency-exchange/health
+              port: 8181
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /currency-exchange/health
+              port: 8181
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 10
+          resources:
+            requests:
+              memory: 512Mi
+            limits:
+              memory: 1024Mi
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+#CurrencyExchange Service Configuration
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: currency-exchange
+  name: currency-exchange
+spec:
+  ports:
+    - name: http-exchange
+      port: 8181
+  selector:
+    app: currency-exchange
+#  sessionAffinity: ClientIP
+  type: NodePort

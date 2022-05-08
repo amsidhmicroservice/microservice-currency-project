@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-main
+  namespace: logging
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+data:
+  fluent.conf: |-
+    # This is the root config file, which only includes components of the actual configuration
+
+    # Do not collect fluentd's own logs to avoid infinite loops.
+    <label @FLUENT_LOG>
+      <match fluent.*>
+        # @type null
+        @type stdout
+      </match>
+    </label>
+
+    @include config.d/*.conf
+    @include fluentd-ms-conf.d/*
+    #@include fluentd-gny-conf.d/*
+    #@include fluentd-co-conf.d/*
+    # @include fluentd-prometheus-conf.d/*
+    # @include fluentd-systemd-conf.d/*

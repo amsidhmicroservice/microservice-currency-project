@@ -1,0 +1,14 @@
+# Horizontal Scaling of the pod based on CUP utilization
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: currency-conversion-hpa
+  namespace: default
+spec:
+  maxReplicas: 3
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: currency-conversion
+  targetCPUUtilizationPercentage: 10

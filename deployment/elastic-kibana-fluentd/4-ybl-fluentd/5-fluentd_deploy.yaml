@@ -1,0 +1,116 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fluentd
+  namespace: logging
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fluentd-read
+rules:
+- apiGroups: [""]
+  resources:
+  - namespaces
+  - pods
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fluentd-read
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: fluentd-read
+subjects:
+- kind: ServiceAccount
+  name: fluentd
+  namespace: logging
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd
+  namespace: logging
+  labels:
+    k8s-app: fluentd-logging
+    kubernetes.io/cluster-service: "true"
+spec:
+  selector:
+    matchLabels:
+      k8s-app: fluentd-logging
+  template:
+    metadata:
+      labels:
+        k8s-app: fluentd-logging
+        kubernetes.io/cluster-service: "true"
+    spec:
+      containers:
+      - name: fluentd
+        image: xi2852amsidhlokhande/custom-fluend:v1.2.4
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 2020
+        env:
+        - name: FLUENTD_ARGS
+          value: --no-supervisor -q
+
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        - name: fluentd-main
+          mountPath: /fluentd/etc
+        - name: fluentd-config
+          mountPath: /fluentd/etc/config.d
+        - name: fluentd-ms-config
+          mountPath: /fluentd/etc/fluentd-ms-conf.d
+        - name: mountcontainer
+          mountPath: /var/log/containers
+
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+
+      - name: fluentd-main
+        configMap:
+          name: fluentd-main
+      - name: fluentd-config
+        configMap:
+          name: fluentd-es-config
+      - name: fluentd-ms-config
+        configMap:
+          name: fluentd-ms-config
+          defaultMode: 0777
+      - name: mountcontainer
+        hostPath:
+          path: /var/log/containers
+      #- name: fluentd-co-config
+      #  configMap:
+      #    name: fluentd-co-config
+      #    defaultMode: 0777
+      #- name: fluentd-gny-config
+      #  configMap:
+      #    name: fluentd-gny-config
+      #    defaultMode: 0777
+      serviceAccountName: fluentd
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      - operator: "Exists"
+        effect: "NoExecute"
+      - operator: "Exists"
+        effect: "NoSchedule"

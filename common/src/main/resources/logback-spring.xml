@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty scope="context" name="service-name" source="spring.application.name"/>
+    <springProperty scope="context" name="version" source="info.app.version"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${service-name:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="com.amsidh.mvc.common.JsonEncoder"/>
+       <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--<appender name="StringBasedRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>D:\currency-exchange-string.log</file>
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>currency-exchange-string-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>1MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10MB</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
+    <appender name="JSONBasedRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>D:\currency-exchange-json.log</file>
+        <encoder class="com.amsidh.mvc.common.JsonEncoder"/>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>currency-exchange-json-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>1MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10MB</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
+    -->
+    <root level="info">
+        <appender-ref ref="stdout"/>
+        <!--<appender-ref ref="StringBasedRollingFile"/>
+        <appender-ref ref="JSONBasedRollingFile"/>-->
+    </root>
+</configuration>
