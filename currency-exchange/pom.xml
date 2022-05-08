@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>com.amsidh.mvc</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>common-lib</artifactId>
             <version>${common.version}</version>
         </dependency>
         <dependency>
@@ -71,6 +71,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Eureka Discovery Client-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+
     </dependencies>
     <dependencyManagement>
         <dependencies>

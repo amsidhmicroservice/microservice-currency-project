@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>com.amsidh.mvc</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>common-lib</artifactId>
             <version>${common.version}</version>
         </dependency>
 
@@ -89,6 +89,12 @@
             <artifactId>wiremock-spring-boot-starter</artifactId>
             <version>0.8.0</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Eureka Discovery Client-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
     </dependencies>
