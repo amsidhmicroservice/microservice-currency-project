@@ -17,8 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -46,7 +45,7 @@ public class CurrencyExchangeClientIntegrationTest {
                                 .conversionMultiple(BigDecimal.valueOf(60L))
                                 .build()))));
         CurrencyExchange currencyExchange = currencyExchangeClient.getCurrencyExchange("USD", "INR");
-        assertTrue(currencyExchange.getConversionMultiple() != null);
+        assertNotNull(currencyExchange.getConversionMultiple());
         assertTrue(currencyExchange.getCurrencyFrom().equalsIgnoreCase("USD"));
         assertTrue(currencyExchange.getCurrencyTo().equalsIgnoreCase("INR"));
     }
