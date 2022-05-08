@@ -6,10 +6,13 @@ import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotNull;
 
-public class MapperUtil {
+public final class MapperUtil {
 
-    private static final ModelMapper modelMapper = new ModelMapper();
+    private static final ModelMapper modelMapper;
 
+    static{
+        modelMapper = new ModelMapper();
+    }
     public static CurrencyExchangeEntity toExchange(@NotNull CurrencyExchange currencyExchangeDTO) {
         return modelMapper.map(currencyExchangeDTO, CurrencyExchangeEntity.class);
     }

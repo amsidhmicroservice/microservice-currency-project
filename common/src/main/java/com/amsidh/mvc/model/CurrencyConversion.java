@@ -23,7 +23,5 @@ public class CurrencyConversion {
 
     private BigDecimal totalCalculatedAmount;
 
-    private String exchangeEnvironmentInfo;
-
-    private String conversionEnvironmentInfo;
+    private InstanceInfo instanceInfo;
 }

@@ -1,5 +1,6 @@
 package com.amsidh.mvc.entity;
 
+import com.amsidh.mvc.model.InstanceInfo;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -7,14 +8,12 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Getter
-@Setter
-@ToString
+@Entity
+@Table(name = "Exchange")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Builder
-@Table(name = "Exchange")
 public class CurrencyExchangeEntity {
     @Id
     @GeneratedValue
@@ -29,20 +28,4 @@ public class CurrencyExchangeEntity {
 
     @Column(nullable = false)
     private BigDecimal conversionMultiple;
-
-    @Column
-    private String exchangeEnvironmentInfo;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        CurrencyExchangeEntity that = (CurrencyExchangeEntity) o;
-        return id != null && Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

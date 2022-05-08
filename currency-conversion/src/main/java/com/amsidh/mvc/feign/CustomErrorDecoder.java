@@ -1,4 +1,4 @@
-package com.amsidh.mvc.client;
+package com.amsidh.mvc.feign;
 
 import com.amsidh.mvc.exception.BadRequestException;
 import com.amsidh.mvc.exception.NotFoundException;

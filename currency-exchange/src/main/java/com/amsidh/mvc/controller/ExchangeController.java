@@ -2,14 +2,17 @@ package com.amsidh.mvc.controller;
 
 import com.amsidh.mvc.entity.CurrencyExchangeEntity;
 import com.amsidh.mvc.model.CurrencyExchange;
+import com.amsidh.mvc.model.InstanceInfo;
 import com.amsidh.mvc.repository.ExchangeRepository;
-import com.amsidh.mvc.service.InstanceInformationService;
 import com.amsidh.mvc.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/currency-exchange")
 public class ExchangeController {
     private final ExchangeRepository exchangeRepository;
-    private final InstanceInformationService instanceInformationService;
+    private final InstanceInfo instanceInfo;
 
     @GetMapping(value = "/health", produces = {MediaType.APPLICATION_JSON_VALUE})
     public String healthCheck() {
@@ -32,8 +35,9 @@ public class ExchangeController {
         log.info("=======Start Request=======");
         log.info("Inside getCurrencyExchange method of ExchangeRepository");
         CurrencyExchangeEntity currencyExchangeEntity = exchangeRepository.findExchangeByCurrencyFromAndCurrencyTo(currencyFrom, currencyTo);
-        currencyExchangeEntity.setExchangeEnvironmentInfo(instanceInformationService.retrieveInstanceInfo());
+        CurrencyExchange currencyExchange = MapperUtil.toExchangeDTO(currencyExchangeEntity);
+        currencyExchange.setInstanceInfo(instanceInfo);
         log.info("=======End Request=======");
-        return MapperUtil.toExchangeDTO(currencyExchangeEntity);
+        return currencyExchange;
     }
 }

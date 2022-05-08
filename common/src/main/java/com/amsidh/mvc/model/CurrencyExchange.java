@@ -17,5 +17,5 @@ public class CurrencyExchange implements Serializable {
     private String currencyFrom;
     private String currencyTo;
     private BigDecimal conversionMultiple;
-    private String exchangeEnvironmentInfo;
+    private InstanceInfo instanceInfo;
 }

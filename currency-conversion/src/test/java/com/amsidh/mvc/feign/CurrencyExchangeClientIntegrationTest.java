@@ -1,4 +1,4 @@
-package com.amsidh.mvc.client;
+package com.amsidh.mvc.feign;
 
 import com.amsidh.mvc.exception.BadRequestException;
 import com.amsidh.mvc.exception.NotFoundException;
@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import feign.FeignException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -55,21 +56,19 @@ public class CurrencyExchangeClientIntegrationTest {
     public void getCurrencyExchangeWithBadRequestTest() {
         wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/currency-exchange/USD/to/INR"))
                 .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.BAD_REQUEST.value())
-                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)));
+                        .withStatus(HttpStatus.BAD_REQUEST.value())));
         Exception exception = assertThrows(Exception.class, () -> currencyExchangeClient.getCurrencyExchange("USD", "INR"));
-        assertTrue(exception instanceof BadRequestException);
-        assertTrue(exception.getMessage().equalsIgnoreCase("Bad Request"));
+        assertTrue(exception instanceof FeignException.FeignClientException.BadRequest);
+        assertTrue(exception.getMessage().contains("Bad Request"));
     }
 
     @Test
     public void getCurrencyExchangeWithNotFoundRequestTest() {
         wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/currency-exchange/USD/to/INR"))
                 .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.NOT_FOUND.value())
-                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)));
+                        .withStatus(HttpStatus.NOT_FOUND.value())));
         Exception exception = assertThrows(Exception.class, () -> currencyExchangeClient.getCurrencyExchange("USD", "INR"));
-        assertTrue(exception instanceof NotFoundException);
-        assertTrue(exception.getMessage().equalsIgnoreCase("Not Found"));
+        assertTrue(exception instanceof FeignException.FeignClientException.NotFound);
+        assertTrue(exception.getMessage().contains("Not Found"));
     }
 }
