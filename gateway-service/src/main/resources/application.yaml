@@ -1,19 +1,48 @@
+server:
+  port: 8765
+eureka:
+  client:
+    service-url:
+      - defaultZone: http://localhost:8761/eureka
+
 spring:
   application:
     name: gateway-service
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      routes:
+        - id: currency-exchange-service
+          predicates:
+            - Path=/currency-exchange/**
+          filters:
+            - RemoveRequestHeader=Cookie
+          uri: lb://currency-exchange
 
-server:
-  port: 8765
+        - id: currency-conversion-service
+          predicates:
+            - Path=/currency-conversion/**
+          filters:
+            - RemoveRequestHeader=Cookie
+          uri: lb://currency-conversion
 
-eureka:
-  client:
-    service-url:
-      - defaultZone: http://localhost:8761/eureka
+        - id: currency-conversion-dummy-service
+          predicates:
+            - Path=/dummy/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/dummy/(?<segment>.*), /currency-conversion/${segment}
+          uri: lb://currency-conversion
+
+        - id: get-info-service
+          predicates:
+            - Path=/get/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AddRequestHeader=MyHeader, MyValue
+            - AddRequestParameter=Param1, Value1
+          uri: http://httpbin.org:80
+
+
+
 
 
