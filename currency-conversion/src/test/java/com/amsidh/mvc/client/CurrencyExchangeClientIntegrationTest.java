@@ -26,7 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CurrencyExchangeClientIntegrationTest {
     @Autowired
     public WireMockServer wireMockServer;
-    public ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    public ObjectMapper objectMapper;
 
     @Autowired
     private CurrencyExchangeClient currencyExchangeClient;
@@ -41,7 +43,7 @@ public class CurrencyExchangeClientIntegrationTest {
                                 .builder()
                                 .currencyFrom("USD")
                                 .currencyTo("INR")
-                                .conversionMultiple(BigDecimal.valueOf(60l))
+                                .conversionMultiple(BigDecimal.valueOf(60L))
                                 .build()))));
         CurrencyExchange currencyExchange = currencyExchangeClient.getCurrencyExchange("USD", "INR");
         assertTrue(currencyExchange.getConversionMultiple() != null);

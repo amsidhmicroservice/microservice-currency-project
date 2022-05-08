@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 @Slf4j
 @ActiveProfiles("test")
-class CurrencyConversionApplicationTests {
+class CurrencyConversionApplicationTest {
 
 
     @Test
