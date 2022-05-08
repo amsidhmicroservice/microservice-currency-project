@@ -8,41 +8,7 @@ eureka:
 spring:
   application:
     name: gateway-service
-  cloud:
-    gateway:
-      routes:
-        - id: currency-exchange-service
-          predicates:
-            - Path=/currency-exchange/**
-          filters:
-            - RemoveRequestHeader=Cookie
-          uri: lb://currency-exchange
-
-        - id: currency-conversion-service
-          predicates:
-            - Path=/currency-conversion/**
-          filters:
-            - RemoveRequestHeader=Cookie
-          uri: lb://currency-conversion
-
-        - id: currency-conversion-dummy-service
-          predicates:
-            - Path=/dummy/**
-          filters:
-            - RemoveRequestHeader=Cookie
-            - RewritePath=/dummy/(?<segment>.*), /currency-conversion/${segment}
-          uri: lb://currency-conversion
-
-        - id: get-info-service
-          predicates:
-            - Path=/get/**
-          filters:
-            - RemoveRequestHeader=Cookie
-            - AddRequestHeader=MyHeader, MyValue
-            - AddRequestParameter=Param1, Value1
-          uri: http://httpbin.org:80
-
-
-
-
-
+  config:
+    import: optional:configserver:http://localhost:8888
+  profiles:
+    active: test
