@@ -1,16 +1,14 @@
 package com.amsidh.mvc.currencyconversion.service.impl;
 
-import com.amsidh.mvc.currencyconversion.feign.CurrencyExchangeClient;
 import com.amsidh.mvc.currencyconversion.service.CurrencyConversionService;
+import com.amsidh.mvc.feign.CurrencyExchangeClient;
 import com.amsidh.mvc.model.CurrencyConversion;
 import com.amsidh.mvc.model.CurrencyExchange;
 import com.amsidh.mvc.model.InstanceInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.resilience4j.bulkhead.BulkheadRegistry;
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.decorators.Decorators;
-import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
