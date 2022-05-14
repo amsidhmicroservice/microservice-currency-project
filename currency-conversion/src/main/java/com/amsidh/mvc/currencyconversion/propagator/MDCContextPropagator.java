@@ -1,4 +1,4 @@
-package com.amsidh.mvc.propagator;
+package com.amsidh.mvc.currencyconversion.propagator;
 
 import io.github.resilience4j.core.ContextPropagator;
 import org.slf4j.MDC;
@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 // This class is used to propagate MDC context in retry and circuit breaker calls
-public class MdcContextPropagator implements ContextPropagator<Map<String, String>> {
+public class MDCContextPropagator implements ContextPropagator<Map<String, String>> {
 
     @Override
     public Supplier<Optional<Map<String, String>>> retrieve() {

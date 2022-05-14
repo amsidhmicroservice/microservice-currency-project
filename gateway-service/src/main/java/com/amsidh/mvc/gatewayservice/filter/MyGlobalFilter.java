@@ -1,4 +1,4 @@
-package com.amsidh.mvc.gatewayservice;
+package com.amsidh.mvc.gatewayservice.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

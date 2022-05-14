@@ -1,5 +1,5 @@
 server:
-  port: 8282
+  port: ${CURRENCY_CONVERSION_SERVICE_PORT:0}
 spring:
   application:
     name: currency-conversion
@@ -11,4 +11,40 @@ spring:
 eureka:
   client:
     service-url:
-      - defaultZone : http://localhost:8761/eureka
+      - defaultZone: http://localhost:8761/eureka
+
+
+resilience4j:
+  timelimiter:
+    metrics:
+      enabled: true
+    configs:
+      default:
+        cancelRunningFuture: true
+        timeoutDuration: 50s
+        eventConsumerBufferSize: 10
+    instances:
+      currency-exchange-api-call-timelimiter:
+        base-config: default
+  retry:
+    configs:
+      default:
+        maxAttempts: 10 # in fact, there will be only (5-1=4) retry attempt
+        waitDuration: 2s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        exponentialMaxWaitDuration: 5s
+        retryExceptions:
+          - org.springframework.web.client.ResourceAccessException
+          - org.springframework.web.client.HttpServerErrorException
+          - java.lang.Throwable
+        ignoreExceptions:
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
+          - io.github.resilience4j.bulkhead.BulkheadFullException
+    instances:
+      currency-exchange-api-call-retry:
+        baseConfig: default
+
+
+
+

@@ -1,5 +1,5 @@
 server:
-  port: ${EXCHANGE_SERVICE_PORT:0}
+  port: ${CURRENCY_EXCHANGE_SERVICE_PORT:0}
 spring:
   application:
     name: currency-exchange
