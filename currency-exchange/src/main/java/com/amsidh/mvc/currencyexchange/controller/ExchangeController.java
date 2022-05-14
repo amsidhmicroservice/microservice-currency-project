@@ -5,6 +5,7 @@ import com.amsidh.mvc.model.InstanceInfo;
 import com.amsidh.mvc.currencyexchange.repository.ExchangeRepository;
 import com.amsidh.mvc.currencyexchange.util.MapperUtil;
 import com.amsidh.mvc.currencyexchange.entity.CurrencyExchangeEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -22,22 +23,22 @@ public class ExchangeController {
     private final ExchangeRepository exchangeRepository;
     private final InstanceInfo instanceInfo;
 
+    private final ObjectMapper objectMapper;
+
     @GetMapping(value = "/health", produces = {MediaType.APPLICATION_JSON_VALUE})
     public String healthCheck() {
         return "{\"status\":\"Currency-Exchange Service is up and running\"}";
     }
 
 
-    //http://34.121.35.177:8181/currency-exchange/USD/to/INR
+    //http://localjost:{RandomPortNumber}/currency-exchange/USD/to/INR
     @SneakyThrows
     @GetMapping(value = "/{currencyFrom}/to/{currencyTo}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public CurrencyExchange getCurrencyExchange(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo) {
-        log.info("=======Start Request=======");
-        log.info("Inside getCurrencyExchange method of ExchangeRepository");
         CurrencyExchangeEntity currencyExchangeEntity = exchangeRepository.findExchangeByCurrencyFromAndCurrencyTo(currencyFrom, currencyTo);
         CurrencyExchange currencyExchange = MapperUtil.toExchangeDTO(currencyExchangeEntity);
         currencyExchange.setInstanceInfo(instanceInfo);
-        log.info("=======End Request=======");
+        log.info("Returning response from ExchangeController {}", objectMapper.writeValueAsString(currencyExchange));
         return currencyExchange;
     }
 }

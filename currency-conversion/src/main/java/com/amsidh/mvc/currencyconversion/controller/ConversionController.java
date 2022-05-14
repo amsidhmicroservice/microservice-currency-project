@@ -30,9 +30,7 @@ public class ConversionController {
     @SneakyThrows
     @GetMapping(value = {"/from/{currencyFrom}/to/{currencyTo}/quantity/{quantity}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public CurrencyConversion convertCurrency(@PathVariable("currencyFrom") String currencyFrom, @PathVariable("currencyTo") String currencyTo, @PathVariable("quantity") BigDecimal quantity) {
-        log.info("=======================================Start Request================================================");
         CurrencyConversion currencyConversion = currencyConversionService.getCurrencyConversion(currencyFrom, currencyTo, quantity);
-        log.info("=======================================End Request================================================");
         return currencyConversion;
     }
 }
