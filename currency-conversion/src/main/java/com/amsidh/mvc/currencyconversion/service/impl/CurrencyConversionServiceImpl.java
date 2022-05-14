@@ -6,6 +6,12 @@ import com.amsidh.mvc.model.CurrencyConversion;
 import com.amsidh.mvc.model.CurrencyExchange;
 import com.amsidh.mvc.model.InstanceInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.bulkhead.BulkheadRegistry;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.decorators.Decorators;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +30,20 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
 
     private final ObjectMapper objectMapper;
 
+    private final RetryRegistry retryRegistry;
+    private final CircuitBreakerRegistry circuitBreakerRegistry;
+    private final BulkheadRegistry bulkheadRegistry;
+
     @SneakyThrows
     @Override
     public CurrencyConversion getCurrencyConversion(String currencyFrom, String currencyTo, BigDecimal quantity) {
         CurrencyConversion currencyConversion = CurrencyConversion.builder().from(currencyFrom).to(currencyTo).quantity(quantity).instanceInfo(instanceInfo).build();
         log.info("Calling currency-exchange service with currencyFrom {}  and currencyTo {}", currencyFrom, currencyTo);
 
-        CurrencyExchange exchange = currencyExchangeClient.getCurrencyExchange(currencyFrom, currencyTo);
+        CurrencyExchange exchange = Decorators.ofSupplier(() -> currencyExchangeClient.getCurrencyExchange(currencyFrom, currencyTo)).withRetry(this.retryRegistry.retry("currency-exchange-api-call-circuit-breaker")).withCircuitBreaker(this.circuitBreakerRegistry.circuitBreaker("currency-exchange-api-call-circuit-breaker")).withBulkhead(bulkheadRegistry.bulkhead("currency-exchange-api-call-bulkhead")).withFallback((currencyExchange, throwable) -> {
+            log.error("Returning Fallback default");
+            return throwable != null ? CurrencyExchange.builder().build() : currencyExchange;
+        }).decorate().get();
 
         log.info("Response received from currency-exchange service {}", exchange != null ? objectMapper.writeValueAsString(exchange) : null);
         Optional.ofNullable(exchange).ifPresent(currencyExchange -> {
