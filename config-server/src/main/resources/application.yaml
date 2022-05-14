@@ -11,7 +11,7 @@ spring:
       server:
         bootstrap: true
         native:
-          search-locations: file:///E:/workspaces/git-localconfig-repo
+          search-locations: file:///E:/workspaces/microservice-currency-project/git-localconfig-repo
         git:
           uri: https://github.com/amsidhmicroservice/git-localconfig-repo.git
           default-label: master
