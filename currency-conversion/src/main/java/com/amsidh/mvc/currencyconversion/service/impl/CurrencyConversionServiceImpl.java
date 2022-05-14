@@ -25,25 +25,17 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
 
     private final CurrencyExchangeClient currencyExchangeClient;
     private final InstanceInfo instanceInfo;
-
     private final ObjectMapper objectMapper;
-
-    private final RetryRegistry retryRegistry;
-    private final CircuitBreakerRegistry circuitBreakerRegistry;
-    private final BulkheadRegistry bulkheadRegistry;
 
     @SneakyThrows
     @Override
     public CurrencyConversion getCurrencyConversion(String currencyFrom, String currencyTo, BigDecimal quantity) {
         CurrencyConversion currencyConversion = CurrencyConversion.builder().from(currencyFrom).to(currencyTo).quantity(quantity).instanceInfo(instanceInfo).build();
         log.info("Calling currency-exchange service with currencyFrom {}  and currencyTo {}", currencyFrom, currencyTo);
-
-        CurrencyExchange exchange = Decorators.ofSupplier(() -> currencyExchangeClient.getCurrencyExchange(currencyFrom, currencyTo)).withRetry(this.retryRegistry.retry("currency-exchange-api-call-circuit-breaker")).withCircuitBreaker(this.circuitBreakerRegistry.circuitBreaker("currency-exchange-api-call-circuit-breaker")).withBulkhead(bulkheadRegistry.bulkhead("currency-exchange-api-call-bulkhead")).withFallback((currencyExchange, throwable) -> {
-            log.error("Returning Fallback default");
-            return throwable != null ? CurrencyExchange.builder().build() : currencyExchange;
-        }).decorate().get();
-
-        log.info("Response received from currency-exchange service {}", exchange != null ? objectMapper.writeValueAsString(exchange) : null);
+        CurrencyExchange exchange = currencyExchangeClient.getCurrencyExchange(currencyFrom, currencyTo);
+        if (Optional.ofNullable(exchange).isPresent()) {
+            log.info("Response received from currency-exchange service {}", objectMapper.writeValueAsString(exchange));
+        }
         Optional.ofNullable(exchange).ifPresent(currencyExchange -> {
             currencyConversion.setId(exchange.getId());
             currencyConversion.setConversionMultiple(exchange.getConversionMultiple());
